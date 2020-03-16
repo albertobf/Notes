@@ -1,0 +1,12 @@
+package com.github.albertobf.notes.repository;
+
+import com.github.albertobf.notes.model.Note;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
+public interface NoteRepository extends CrudRepository<Note, Long> {
+
+    List<Note> findByUser_Id(Long userId);
+
+}

@@ -50,4 +50,12 @@ public class Note {
     public void setUpdatedOn(LocalDate updatedOn) {
         this.updatedOn = updatedOn;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

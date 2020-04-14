@@ -15,6 +15,9 @@ public class User {
     private String name;
     @OneToMany(mappedBy = "user")
     private Set<Note> notes;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<Role> roles;
 
     public User() {
     }
@@ -49,5 +52,21 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(Set<Note> notes) {
+        this.notes = notes;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

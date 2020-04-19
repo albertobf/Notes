@@ -1,27 +1,25 @@
-package com.github.albertobf.notes.model;
+package com.github.albertobf.notes.model.dto;
 
-import javax.persistence.*;
+import com.github.albertobf.notes.model.Note;
+
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "note")
-public class Note {
+public class NoteDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
-    @ManyToOne
-    private User user;
 
-    public Note() {
+    public NoteDTO() {
+
     }
 
-    public Note(String content) {
-        this.content = content;
-        this.createdOn = LocalDateTime.now();
+    public NoteDTO(Note note) {
+        this.id = note.getId();
+        this.content = note.getContent();
+        this.createdOn = note.getCreatedOn();
+        this.updatedOn = note.getUpdatedOn();
     }
 
     public Long getId() {
@@ -56,11 +54,10 @@ public class Note {
         this.updatedOn = updatedOn;
     }
 
-    public User getUser() {
-        return user;
+    public Note getNoteFromDTO() {
+        return new Note(
+                content
+        );
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +38,7 @@ class NoteRepositoryTest {
         //given
         Note note = new Note();
         note.setContent("Test note!");
-        note.setCreatedOn(LocalDate.now());
+        note.setCreatedOn(LocalDateTime.now());
         note.setUser(userFromDb);
         entityManager.persistAndFlush(note);
 

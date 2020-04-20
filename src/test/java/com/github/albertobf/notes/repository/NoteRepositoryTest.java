@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +35,7 @@ class NoteRepositoryTest {
     }
 
     @Test
-    public void whenFindNotesByUserId_thenReturnNotes() {
+    public void whenFindNotesByExistingUserId_thenReturnNotes() {
         //given
         Note note = new Note();
         note.setContent("Test note!");
@@ -47,6 +48,22 @@ class NoteRepositoryTest {
 
         //then
         assertThat(notes.get(0).getContent()).isEqualTo(note.getContent());
+    }
+
+    @Test
+    public void whenFindNotesByNotExistingUserId_thenReturnNotes() {
+        //given
+        Note note = new Note();
+        note.setContent("Test note!");
+        note.setCreatedOn(LocalDateTime.now());
+        note.setUser(userFromDb);
+        entityManager.persistAndFlush(note);
+
+        //when
+        List<Note> notes = noteRepository.findByUser_Id(-1L);
+
+        //then
+        assertThat(notes).isEqualTo(Collections.emptyList());
     }
 
 }

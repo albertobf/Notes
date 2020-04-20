@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -46,6 +49,29 @@ class NoteServiceImplTest {
         //then
         assertThat(savedNote).isNotNull();
         verify(noteRepository).save(eq(note));
+    }
+
+    @Test
+    void whenGetNotesByExistingUser_thenReturnNotes() {
+        //given
+        List<Note> notes = Collections.singletonList(note);
+        when(noteRepository.findByUser_Id(user.getId())).thenReturn(notes);
+        //when
+        List<Note> notesDb = noteService.getNotesByUserId(user.getId());
+        //then
+        verify(noteRepository).findByUser_Id(user.getId());
+        assertThat(notesDb).isEqualTo(notes);
+    }
+
+    @Test
+    void whenGetNotesByNotExistingUser_thenReturnEmptyList() {
+        //given
+        when(noteRepository.findByUser_Id(-1L)).thenReturn(Collections.emptyList());
+        //when
+        List<Note> notesDb = noteService.getNotesByUserId(-1L);
+        //then
+        verify(noteRepository).findByUser_Id(-1L);
+        assertThat(notesDb).isEqualTo(Collections.emptyList());
     }
 
 }

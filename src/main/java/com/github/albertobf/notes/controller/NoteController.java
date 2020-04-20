@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -29,7 +30,9 @@ public class NoteController {
     }
 
     @GetMapping
-    public String index() {
+    public String index(Model model, @AuthenticationPrincipal AppUserDetails userDetails) {
+        Long userId = userDetails.getUserId();
+        model.addAttribute("notes", noteService.getNotesByUserId(userId));
         return "index";
     }
 
@@ -40,14 +43,14 @@ public class NoteController {
     }
 
     @PostMapping(path = "add")
-    public String addNoteSubmit(@AuthenticationPrincipal AppUserDetails userDetails, @ModelAttribute NoteDTO noteDTO) {
+    public ModelAndView addNoteSubmit(@AuthenticationPrincipal AppUserDetails userDetails, @ModelAttribute NoteDTO noteDTO) {
         Note note = noteDTO.getNoteFromDTO();
         Optional<User> user = userService.findByUsername(userDetails.getUsername());
         user.ifPresent(user1 -> {
             note.setUser(user1);
             noteService.addNote(note);
         });
-        return "index";
+        return new ModelAndView("redirect:/");
     }
 
 }

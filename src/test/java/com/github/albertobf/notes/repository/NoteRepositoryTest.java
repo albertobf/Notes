@@ -11,8 +11,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 class NoteRepositoryTest {
@@ -64,6 +67,39 @@ class NoteRepositoryTest {
 
         //then
         assertThat(notes).isEqualTo(Collections.emptyList());
+    }
+
+    @Test
+    public void whenFindNoteByValidIdAndUserId_thenReturnNote() {
+        //given
+        Note note = new Note();
+        note.setContent("Test note!");
+        note.setCreatedOn(LocalDateTime.now());
+        note.setUser(userFromDb);
+        entityManager.persistAndFlush(note);
+
+        //when
+        Optional<Note> noteDB = noteRepository.findByIdAndUser_Id(note.getId(), userFromDb.getId());
+
+        //then
+        assertTrue(noteDB.isPresent());
+        assertThat(noteDB.get()).isEqualTo(note);
+    }
+
+    @Test
+    public void whenFindNoteByInvalidIdAndUserId_thenReturnNote() {
+        //given
+        Note note = new Note();
+        note.setContent("Test note!");
+        note.setCreatedOn(LocalDateTime.now());
+        note.setUser(userFromDb);
+        entityManager.persistAndFlush(note);
+
+        //when
+        Optional<Note> noteDB = noteRepository.findByIdAndUser_Id(note.getId(), -1L);
+
+        //then
+        assertFalse(noteDB.isPresent());
     }
 
 }

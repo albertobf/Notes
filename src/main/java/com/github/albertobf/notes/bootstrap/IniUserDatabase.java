@@ -14,6 +14,9 @@ import java.util.HashSet;
 @Component
 public class IniUserDatabase implements CommandLineRunner {
 
+    public static final String USERNAME = "albertobf";
+    public static final String PASSWORD = "alberto";
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -31,8 +34,8 @@ public class IniUserDatabase implements CommandLineRunner {
         roleRepository.save(role);
 
         User user = new User();
-        user.setUsername("albertobf");
-        user.setPassword(passwordEncoder.encode("alberto"));
+        user.setUsername(USERNAME);
+        user.setPassword(passwordEncoder.encode(PASSWORD));
         user.setRoles(new HashSet<>(Arrays.asList(role)));
         userRepository.save(user);
     }

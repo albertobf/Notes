@@ -17,10 +17,13 @@
 
 <div class="container">
     <p></p>
-    <form method="post" th:action="@{/add}" th:object="${note}">
+    <form method="post" th:action="@{/add}" th:object="${noteDTO}">
         <div class="form-group w-75">
             <label for="note">Add a note</label>
             <textarea class="form-control" id="note" rows="3" th:field="*{content}" maxlength="255" required></textarea>
+            <div class="alert alert-danger" role="alert" style="margin: 5px;"
+                 th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
+            </div>
         </div>
         <button type="submit" class="btn btn-primary">Add Note</button>
     </form>
